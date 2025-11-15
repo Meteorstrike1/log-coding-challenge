@@ -1,0 +1,6 @@
+inherit_gem:
+  dvla-lint: ".rubocop.yml"
+
+AllCops:
+  TargetRubyVersion: 3.4
+  NewCops: enable

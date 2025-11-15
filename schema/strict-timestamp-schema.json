@@ -1,0 +1,89 @@
+{
+  "$id": "log-validation",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Email Templating Service Logs",
+  "description": "Schema to validate email templating service logs",
+  "type": "object",
+  "examples": [
+    {
+      "timestamp": "2025-08-01T00:04:50.000Z",
+      "level": "INFO",
+      "service": "email-template-service",
+      "event": "email_sent",
+      "requestId": "4ed9ae71-73cd-471b-87f8-c1ac6f891f59",
+      "email": {
+        "to": "security-team.6bd7f5e98813fa8093779f22b585155e@dvla.cloud",
+        "subject": "Alert",
+        "template": "password_reset",
+        "provider": "mailgun"
+      },
+      "userId": "020482",
+      "durationMs": 652,
+      "status": 200
+    }
+  ],
+  "properties": {
+    "timestamp": {
+      "description": "Timestamp of the log",
+      "type": "string",
+      "format": "date-time"
+    },
+    "level": {
+      "description": "Log level",
+      "type": "string"
+    },
+    "service": {
+      "description": "Service name",
+      "type": "string"
+    },
+    "event": {
+      "description": "Type of email event",
+      "enum": [
+        "email_sent",
+        "email_queued",
+        "email_failed"
+      ]
+    },
+    "requestId": {
+      "description": "ID of the request",
+      "type": "string"
+    },
+    "email": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "to": {
+          "description": "Email recipient",
+          "type": "string"
+        },
+        "subject": {
+          "description": "Email subject",
+          "type": "string"
+        },
+        "template": {
+          "description": "Email template",
+          "type": "string"
+        },
+        "provider": {
+          "description": "Email provider",
+          "type": "string"
+        }
+      },
+      "required": ["to", "subject"]
+    },
+    "userId": {
+      "description": "User ID",
+      "type": "string"
+    },
+    "durationMs": {
+      "description": "Duration (ms)",
+      "type": "integer"
+    },
+    "status": {
+      "description": "Status code",
+      "type": "integer"
+    }
+  },
+  "required": ["timestamp", "level", "service", "event", "requestId", "email", "userId", "durationMs", "status"],
+  "additionalProperties": false
+}

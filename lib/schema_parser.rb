@@ -4,8 +4,8 @@ require 'pathname'
 module SchemaParser
   SCHEMA_PATH = Pathname(__dir__).join('../schema/email-log-schema.json')
 
-  def self.load_schema
-    JSONSchemer.schema(File.read(SCHEMA_PATH))
+  def self.load_schema(schema_path: SCHEMA_PATH)
+    JSONSchemer.schema(File.read(schema_path))
   end
 
   def self.validate_against_schema(schema, json)
@@ -21,7 +21,7 @@ module SchemaParser
     }
     logs.each do |log|
       json = JSON.parse(log)
-      output = schema.validate(json).to_a
+      output = validate_against_schema(schema, json)
       if output.empty?
         # Save logs with valid structure
         valid_logs << json
@@ -36,6 +36,4 @@ module SchemaParser
     end
     [valid_logs, invalid_logs]
   end
-
-  # TODO: If time add some of the error reading stuff from library
 end

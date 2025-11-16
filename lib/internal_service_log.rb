@@ -1,4 +1,5 @@
 require_relative 'log_helper'
+
 class InternalServiceLog
   attr_reader :service_name, :email_event, :timestamp, :json, :email
 

@@ -1,4 +1,5 @@
 require_relative 'log_helper'
+
 class InternalService
   attr_reader :service_name, :email_events, :email_events_per_hour, :success_rate, :failure_rate_per_hour
 

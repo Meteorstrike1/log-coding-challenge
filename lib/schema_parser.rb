@@ -13,10 +13,12 @@ module SchemaParser
   end
 
   def self.validate_logs(logs, schema)
-    missing_email_count = 0
-    invalid_json_count = 0
-    invalid_log_count = 0
     valid_logs = []
+    invalid_logs = {
+      missing_email: 0,
+      invalid_schema: 0,
+      malformed_json: 0,
+    }
     logs.each do |log|
       json = JSON.parse(log)
       output = schema.validate(json).to_a
@@ -25,14 +27,14 @@ module SchemaParser
         valid_logs << json
       else
         # Logs with invalid structure
-        missing_email_count += 1 unless json.key?('email')
-        invalid_log_count += 1
+        invalid_logs[:missing_email] += 1 unless json.key?('email')
+        invalid_logs[:invalid_schema] += 1
       end
     rescue JSON::ParserError
       # Logs which are malformed JSON
-      invalid_json_count += 1
+      invalid_logs[:malformed_json] += 1
     end
-    [valid_logs, missing_email_count, invalid_json_count, invalid_log_count]
+    [valid_logs, invalid_logs]
   end
 
   # TODO: If time add some of the error reading stuff from library

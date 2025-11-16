@@ -6,14 +6,14 @@ require_relative 'schema_parser'
 schema = SchemaParser.load_schema
 logs = DataLoader.load_file
 
-valid_logs, missing_email_count, invalid_json_count, invalid_log_count = SchemaParser.validate_logs(logs, schema)
+valid_logs, invalid_logs = SchemaParser.validate_logs(logs, schema)
 
 # Dataset parsing
-LOG.info { "Valid log count: #{valid_logs.count}".green }
-LOG.debug { "Failing logs due to malformed JSON: #{invalid_json_count}".red }
-LOG.debug { "Logs with invalid structure: #{invalid_log_count}".red }
-LOG.debug { "Total invalid logs: #{invalid_log_count + invalid_json_count}".red }
-LOG.info { "Failing logs due to missing email key: #{missing_email_count}".red }
+LOG.info { "Total valid logs: #{valid_logs.count}".green }
+LOG.debug { "Invalid logs due to malformed JSON: #{invalid_logs[:malformed_json]}".red }
+LOG.debug { "Invalid logs due to not matching the JSON schema: #{invalid_logs[:invalid_schema]}".red }
+LOG.debug { "Total invalid logs: #{invalid_logs[:malformed_json] + invalid_logs[:invalid_schema]}".red }
+LOG.info { "Invalid logs due to missing email key: #{invalid_logs[:missing_email]}".red }
 
 # Valid log analysis
 internal_service_logs = LogAnalyser.internal_service_emails(valid_logs)

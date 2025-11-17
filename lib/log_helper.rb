@@ -42,7 +42,7 @@ module LogHelper
 
   # Go through individual internal service logs and create a summary per service
   # @param internal_service_logs [Array<InternalServiceLog>]
-  # @return [InternalService]
+  # @return [Array<InternalService>]
   def self.summarise_internal_service(internal_service_logs)
     # Initialise a hash with each email event set to zero to enable collecting a running total
     events_per_service = Hash.new { |hash, key| hash[key] = { email_sent: 0, email_queued: 0, email_failed: 0 } }
